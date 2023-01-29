@@ -40,13 +40,15 @@ class skunkworksHDL:
         parse_button.pack(side="left")
         clear_button = tk.Button(self.icon_bar, text="Clear", command=self.clear_canvas)
         clear_button.pack(side="left")
+        template_button = tk.Button(self.icon_bar, text="Template", command=self.insert_template)
+        template_button.pack(side="left")
         
         # Test buttons 
         button1 = tk.Button(self.icon_bar, text="Create Circles", command=self.create_circles) #delete this later
         button1.pack(side="left")#delete this later
         button2 = tk.Button(self.icon_bar, text="Create Line", command=self.create_line)#delete this later
         button2.pack(side="left")#delete this later
-        button3 = tk.Button(self.icon_bar, text="Create Line", command=self.create_port)#delete this later
+        button3 = tk.Button(self.icon_bar, text="Create Port", command=self.create_port)#delete this later
         button3.pack(side="left")#delete this later
 
         # Create text editor
@@ -80,6 +82,24 @@ class skunkworksHDL:
     def clear_canvas(self):
         self.drawing_area.delete("all")
         
+    def insert_template(self):
+        template = """-- VHDL template
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity ENTITY_NAME is
+    port (
+        SIGNAL_1 : in std_logic;
+        SIGNAL_2 : out std_logic
+    );
+end ENTITY_NAME;
+
+architecture BEHAVIOR of ENTITY_NAME is
+begin
+    -- architecture body
+end BEHAVIOR;"""
+        self.text_editor.insert(tk.INSERT, template)
+    
     def create_port(self): #modify all of this
         width = 250  #number of combinatorial logic and signals will define this #modify all of this
         height = 100 #modify all of this
@@ -99,14 +119,10 @@ class skunkworksHDL:
         # Determine the difference in x and y coordinates between the two points
         x1, y1 = 70, 50#delete this later
         x2, y2 = 200,100#delete this later
-        x_diff = abs(x1 - x2)#delete this later
-        y_diff = abs(y1 - y2)#delete this later
 
         # Draw a line between the two points#delete this later
-        if x_diff > y_diff:#delete this later
-            self.drawing_area.create_line(x1, y1, x2, y1, fill="black")#delete this later
-        else:#delete this later
-            self.drawing_area.create_line(x1, y1, x1, y2, fill="black")#delete this later
+        self.drawing_area.create_line(x1, y1, x2, y1, fill="black")#delete this later
+        self.drawing_area.create_line(x2, y1, x2, y2, fill="black")#delete this later
 
 
     def parse_vhdl_file(self):
