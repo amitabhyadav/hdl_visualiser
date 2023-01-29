@@ -7,7 +7,7 @@
 
 import os
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, messagebox, PhotoImage
 
 class skunkworksHDL:
     def __init__(self, root):
@@ -18,18 +18,65 @@ class skunkworksHDL:
         menu_bar = tk.Menu(root)
         root.config(menu=menu_bar)
         root.geometry("1550x850+50+50")
+        logo = tk.PhotoImage(file="docs/pepe-le-pew.png")
+        root.tk.call('wm', 'iconphoto', root._w, logo)
 
         # Create "File" menu
-        file_menu = tk.Menu(menu_bar)
+        file_menu = tk.Menu(menu_bar,tearoff=0)
         menu_bar.add_cascade(label="File", menu=file_menu)
+        file_menu.add_command(label="Create File", command=self.create_file)
         file_menu.add_command(label="Open", command=self.open_file)
         file_menu.add_command(label="Save", command=self.save_file, accelerator="Ctrl+S")
+        file_menu.add_separator()
+        file_menu.add_command(label="Quit", command=self.root.quit, accelerator="Alt+F4")
         root.bind("<Control-s>", self.save_file)
+        
+        # Create "Edit" menu
+        edit_menu = tk.Menu(menu_bar,tearoff=0)
+        menu_bar.add_cascade(label="Edit", menu=edit_menu)
+        edit_menu.add_command(label="Cut")#, command=self.cut_file_contents) #add functionality
+        edit_menu.add_command(label="Copy")#, command=self.cut_file_contents) #add functionality
+        edit_menu.add_command(label="Paste")#, command=self.cut_file_contents) #add functionality
+        edit_menu.add_command(label="Comment")#, command=self.cut_file_contents) #add functionality
+        edit_menu.add_command(label="Uncomment")#, command=self.cut_file_contents) #add functionality
+        
+        # Create "Template" menu # add functionality to all the template menu
+        template_menu = tk.Menu(menu_bar, tearoff=0)
+        menu_bar.add_cascade(label="Template", menu=template_menu)
 
+        vhdl_menu = tk.Menu(template_menu, tearoff=0)
+        template_menu.add_cascade(label="VHDL", menu=vhdl_menu)
+
+        verilog_menu = tk.Menu(template_menu, tearoff=0)
+        template_menu.add_cascade(label="Verilog", menu=verilog_menu)
+
+        combinational_vhdl_menu = tk.Menu(vhdl_menu, tearoff=0)
+        vhdl_menu.add_cascade(label="Combinational", menu=combinational_vhdl_menu)
+
+        sequential_vhdl_menu = tk.Menu(vhdl_menu, tearoff=0)
+        vhdl_menu.add_cascade(label="Sequential", menu=sequential_vhdl_menu)
+
+        combinational_verilog_menu = tk.Menu(verilog_menu, tearoff=0)
+        verilog_menu.add_cascade(label="Combinational", menu=combinational_verilog_menu)
+
+        sequential_verilog_menu = tk.Menu(verilog_menu, tearoff=0)
+        verilog_menu.add_cascade(label="Sequential", menu=sequential_verilog_menu)
+
+        for i in range(5):
+            combinational_vhdl_menu.add_command(label=f"Item {i+1}")
+            sequential_vhdl_menu.add_command(label=f"Item {i+1}")
+            combinational_verilog_menu.add_command(label=f"Item {i+1}")
+            sequential_verilog_menu.add_command(label=f"Item {i+1}")
+        
         # Create "Run" menu
-        run_menu = tk.Menu(menu_bar)
+        run_menu = tk.Menu(menu_bar,tearoff=0)
         menu_bar.add_cascade(label="Run", menu=run_menu)
         run_menu.add_command(label="Run", command=self.parse_vhdl_file)
+        
+        # Create "About" menu
+        about_menu = tk.Menu(menu_bar,tearoff=0)
+        menu_bar.add_cascade(label="?", menu=about_menu)
+        about_menu.add_command(label="About hdl visualiser", command=self.about_sw)
         
         # Create icon bar
         self.icon_bar = tk.Frame(root)
@@ -38,18 +85,18 @@ class skunkworksHDL:
         # Create buttons for icon bar
         parse_button = tk.Button(self.icon_bar, text="Run", command=self.parse_vhdl_file)
         parse_button.pack(side="left")
-        clear_button = tk.Button(self.icon_bar, text="Clear", command=self.clear_canvas)
-        clear_button.pack(side="left")
         template_button = tk.Button(self.icon_bar, text="Template", command=self.insert_template)
         template_button.pack(side="left")
+        clear_button = tk.Button(self.icon_bar, text="Clear", command=self.clear_canvas)
+        clear_button.pack(side="right")
         
         # Test buttons 
-        button1 = tk.Button(self.icon_bar, text="Create Circles", command=self.create_circles) #delete this later
-        button1.pack(side="left")#delete this later
-        button2 = tk.Button(self.icon_bar, text="Create Line", command=self.create_line)#delete this later
-        button2.pack(side="left")#delete this later
-        button3 = tk.Button(self.icon_bar, text="Create Port", command=self.create_port)#delete this later
-        button3.pack(side="left")#delete this later
+        # button1 = tk.Button(self.icon_bar, text="Create Circles", command=self.create_circles) #delete this later
+        # button1.pack(side="left")#delete this later
+        # button2 = tk.Button(self.icon_bar, text="Create Line", command=self.create_line)#delete this later
+        # button2.pack(side="left")#delete this later
+        # button3 = tk.Button(self.icon_bar, text="Create Port", command=self.create_port)#delete this later
+        # button3.pack(side="left")#delete this later
 
         # Create text editor
         self.text_editor = tk.Text(root)
@@ -68,6 +115,10 @@ class skunkworksHDL:
     def update_line_number(self, event):
         line_number = self.text_editor.index(tk.INSERT).split(".")[0]
         self.line_number.set("Line: " + line_number)
+        
+    def create_file(self):
+        file_name = filedialog.asksaveasfilename(initialdir = os.getcwd(), title = "Select file",filetypes = (("txt files","*.txt"),("all files","*.*")))
+        open(file_name, 'a').close()
 
     def open_file(self):
         filepath = filedialog.askopenfilename()
@@ -78,6 +129,12 @@ class skunkworksHDL:
         filepath = filedialog.asksaveasfilename()
         with open(filepath, "w") as f:
             f.write(self.text_editor.get("1.0", "end"))
+            
+    def about_sw(self):
+        # Use the messagebox class to create the dialog box
+        about_message = "SkunkWorks HDL Visualiser\nMade with Python 3.10 + tkinter.\n\nCreated by Amitabh Yadav."
+        tk.messagebox.showinfo("About", about_message)
+
     
     def clear_canvas(self):
         self.drawing_area.delete("all")
