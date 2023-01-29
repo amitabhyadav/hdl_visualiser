@@ -7,7 +7,7 @@ Support for:
 - VHDL
 - Verilog
 
-![demo_gui](docs/gui_demo_v0.1.png)
+<img src="docs/gui_demo_v0.1.png" alt="demo" width="200"/>
 
 To run, simply execute.
 ```python
