@@ -1,4 +1,4 @@
-![pepe](docs.pepe-le-pew.png | width=10)
+<img src="docs/pepe-le-pew.png" alt="" width="20"/>
 
 ## HDL Visualiser
 A python GUI for visualizing your hdl code, show I/Os, internal signals and architecture functionalities.
