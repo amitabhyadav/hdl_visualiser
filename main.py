@@ -18,7 +18,7 @@ class skunkworksHDL:
         menu_bar = tk.Menu(root)
         root.config(menu=menu_bar)
         root.geometry("1550x850+50+50")
-        logo = tk.PhotoImage(file="docs/pepe-le-pew.png")
+        logo = tk.PhotoImage(file="docs/pepe-le-pew-icon.png")
         root.tk.call('wm', 'iconphoto', root._w, logo)
 
         # Create "File" menu
@@ -180,10 +180,8 @@ end BEHAVIOR;"""
         # Draw a line between the two points#delete this later
         self.drawing_area.create_line(x1, y1, x2, y1, fill="black")#delete this later
         self.drawing_area.create_line(x2, y1, x2, y2, fill="black")#delete this later
-
-
-    def parse_vhdl_file(self):
-        # main logic. this function needs a lot of work.
+    
+    def parse_entity(self):
         self.clear_canvas()
         lines = self.text_editor.get("1.0", "end").split("\n")
         for line in lines:
@@ -200,13 +198,60 @@ end BEHAVIOR;"""
                 y = self.drawing_area.winfo_height()/2 - height/2
                 self.drawing_area.create_rectangle(x, y, x + width, y + height)
                 self.drawing_area.create_text(x + width/2, y + height/2, text=entity_name)
-            # create ports in the canvas
-            elif line.startswith("port"):
+        for line in lines:
+            #create ports in the canvas
+            if line.startswith("port"):
                 for i in range(lines.index(line), len(lines)):
                     if ");" in lines[i]:
                         text = lines[i][lines[i].index("(")+1: lines[i].index(")")]
                         self.drawing_area.create_text(10, 10, text=text)
                         break
+    
+    def parse_vhdl_file(self):
+        # Get the text from the text editor
+        text = self.text_editor.get("1.0", "end-1c")
+        
+        # Split the text into lines
+        lines = text.split("\n")
+        
+        # Loop over each line and remove the preceding spaces
+        for i in range(len(lines)):
+            lines[i] = lines[i].strip()
+        
+        # Join the lines back into a single string
+        text = "\n".join(lines)
+        
+        # Update the text in the text editor
+        self.text_editor.delete("1.0", "end")
+        self.text_editor.insert("1.0", text)
+        self.parse_entity()
+
+
+    # def parse_vhdl_file(self):
+        # # main logic. this function needs a lot of work.
+        # self.clear_canvas()
+        # lines = self.text_editor.get("1.0", "end").split("\n")
+        # for line in lines:
+            # # read the entity and creates the entity box.
+            # if line.startswith("entity"):
+                # entity_name = ""
+                # for i in range(lines.index(line), len(lines)):
+                    # entity_name += line[line.index("entity")+7:line.index("is")].strip()
+                    # if "is" in lines[i]:
+                        # break
+                # width = 250  #number of combinatorial logic and signals will define this
+                # height = 100 # number of ports will define height
+                # x = self.drawing_area.winfo_width()/2 - width/2
+                # y = self.drawing_area.winfo_height()/2 - height/2
+                # self.drawing_area.create_rectangle(x, y, x + width, y + height)
+                # self.drawing_area.create_text(x + width/2, y + height/2, text=entity_name)
+            # # create ports in the canvas
+            # elif line.startswith("port"):
+                # for i in range(lines.index(line), len(lines)):
+                    # if ");" in lines[i]:
+                        # text = lines[i][lines[i].index("(")+1: lines[i].index(")")]
+                        # self.drawing_area.create_text(10, 10, text=text)
+                        # break
 
 root = tk.Tk()
 app = skunkworksHDL(root)
