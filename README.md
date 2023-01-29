@@ -1,6 +1,6 @@
 <img src="docs/pepe-le-pew.png" alt="" width="65"/>
 
-## HDL Visualiser
+## SkunkWorks HDL Visualiser
 > under construction
 > please wait for first release before using.
 
