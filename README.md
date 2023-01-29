@@ -10,6 +10,6 @@ python3 main.py
 ```
 
 If you plan to use SkunkWork HDL visualiser for your research or development work, please cite the following paper:
-> Amitabh Yadav, "Faster development of VHDL through visualization, generics and templates" (2023) url: https://github.com/amitabhyadav/hdl_visualiser/
+> Amitabh Yadav, "Faster development of VHDL through visualization and generic templates" (2023) url: https://github.com/amitabhyadav/hdl_visualiser/
 
 (publication pending)
