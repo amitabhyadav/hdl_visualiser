@@ -6,6 +6,7 @@
 
 A python GUI for visualizing your HDL code, show I/Os, internal signals and architecture functionalities.
 
+### Features
 SkunkWorks HDL Visualizer implements:
 - generation of large scale RTL designs using generic HDL templates.
 - hdl linting, lexical analysis, synthesis (using ghdl) and simulation environment.
