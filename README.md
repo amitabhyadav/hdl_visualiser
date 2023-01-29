@@ -1,4 +1,4 @@
-# hdl_visualiser
+## HDL Visualiser
 A python GUI for visualizing your hdl code, show I/Os, internal signals and architecture functionalities.
 uses tkinter library.
 
