@@ -1,4 +1,4 @@
-<img src="docs/pepe-le-pew.png" alt="" width="20"/>
+<img src="docs/pepe-le-pew.png" alt="" width="50"/>
 
 ## HDL Visualiser
 A python GUI for visualizing your hdl code, show I/Os, internal signals and architecture functionalities.
